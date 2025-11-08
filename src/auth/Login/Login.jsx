@@ -15,8 +15,7 @@ import { useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
-  const { loginUser, signInWithGoogle, emailInput, setEmailInput } =
-    useContext(AuthContext);
+  const { loginUser, signInWithGoogle, emailInput, setEmailInput } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
