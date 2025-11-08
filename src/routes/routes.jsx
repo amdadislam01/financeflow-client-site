@@ -3,6 +3,11 @@ import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home/Home";
 import Login from "../auth/Login/Login";
 import SignUp from "../auth/SignUp/SignUp";
+import AddTransaction from "../pages/AddTransaction/AddTransaction";
+import MyTransaction from "../pages/MyTransaction/MyTransaction";
+import PageNotFound from "../pages/PageNotFound/PageNotFound";
+import Myprofile from "../pages/MyProfile/Myprofile";
+import Reports from "../pages/Reports/Reports";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +26,22 @@ export const router = createBrowserRouter([
         path: "/signup",
         Component: SignUp,
       },
+      {
+        path:'/add-transaction',
+        Component: AddTransaction
+      },
+      {
+        path: '/my-transactions',
+        Component: MyTransaction
+      },
+      {
+        path: '/reports',
+        Component: Reports
+      },
+      {
+        path: '/profile',
+        Component: Myprofile
+      }
     ],
   },
 ]);
