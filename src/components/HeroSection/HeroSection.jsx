@@ -1,6 +1,7 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import bannerImage from '/banner.png'
+import { Link } from "react-router";
 
 const HeroSection = () => {
   return (
@@ -29,9 +30,9 @@ const HeroSection = () => {
         </p>
 
         <div className="flex justify-center gap-4">
-          <button className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-teal-600 rounded-full text-white font-semibold shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+          <Link to={'/add-transaction'} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-teal-600 rounded-full text-white font-semibold shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
             Get Started <FaArrowRight />
-          </button>
+          </Link>
 
           <button className="px-6 py-3 border border-white rounded-full text-white font-semibold hover:bg-white hover:text-teal-700 transition-all duration-300 cursor-pointer">
             Learn More
