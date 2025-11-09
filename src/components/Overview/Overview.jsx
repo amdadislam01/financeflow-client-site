@@ -92,7 +92,7 @@ const Overview = () => {
               >
                 Total Balance
               </p>
-              <h2 className="text-3xl font-bold">{balance.toFixed(2)}৳</h2>
+              <h2 className="md:text-md lg:text-3xl font-bold">{balance.toFixed(2)}৳</h2>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ const Overview = () => {
               >
                 Total Income
               </p>
-              <h2 className="text-3xl font-bold">{income.toFixed(2)}৳</h2>
+              <h2 className="md:text-md lg:text-3xl font-bold">{income.toFixed(2)}৳</h2>
             </div>
           </div>
 
@@ -128,7 +128,7 @@ const Overview = () => {
               >
                 Total Expenses
               </p>
-              <h2 className="text-3xl font-bold">{expense.toFixed(2)}৳</h2>
+              <h2 className="md:text-md lg:text-3xl font-bold">{expense.toFixed(2)}৳</h2>
             </div>
           </div>
         </div>
