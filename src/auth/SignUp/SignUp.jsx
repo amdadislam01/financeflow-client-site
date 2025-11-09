@@ -13,7 +13,7 @@ import {
   FaRegChartBar,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import { updateProfile } from "firebase/auth";
 
@@ -24,9 +24,7 @@ const Signup = () => {
     setLoading,
   } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/";
 
    const handleRegister = (e) => {
     e.preventDefault();
@@ -64,17 +62,34 @@ const Signup = () => {
   };
 
   const handleGoogleLogin = () => {
-    signInWithGoogle()
-      .then((result) => {
-        console.log(result.user);
-        toast.success("Login successful!");
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Invalid email or password!");
-      });
-  };
+      signInWithGoogle()
+        .then((result) => {
+          console.log(result.user);
+          const newUsers = {
+            name: result.user.displayName,
+            email: result.user.email,
+            image: result.user.photoURL,
+          };
+  
+          fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify(newUsers),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("data after users side", data);
+              toast.success("Login successful!");
+              navigate("/");
+            })
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Google login failed!");
+        });
+    };
 
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-sky-100 via-white to-[#E0F8F5] items-center justify-center p-5">

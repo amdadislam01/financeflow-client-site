@@ -46,7 +46,7 @@ const AuthProvider = ({ children }) => {
       text: "You will be logged out of your account!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#7C3AED",
+      confirmButtonColor: "#44C223",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Logout",
     }).then((result) => {

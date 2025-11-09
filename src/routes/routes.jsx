@@ -8,6 +8,7 @@ import MyTransaction from "../pages/MyTransaction/MyTransaction";
 import PageNotFound from "../pages/PageNotFound/PageNotFound";
 import Myprofile from "../pages/MyProfile/Myprofile";
 import Reports from "../pages/Reports/Reports";
+import PrivetRoutes from "./PrivetRoutes";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
       },
       {
         path:'/add-transaction',
-        Component: AddTransaction
+        element: <PrivetRoutes><AddTransaction /></PrivetRoutes>
       },
       {
         path: '/my-transactions',
