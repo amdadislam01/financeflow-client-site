@@ -42,7 +42,7 @@ const AddTransaction = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/addtranstion", {
+      const res = await fetch("https://financeflow-tau-eight.vercel.app/addtranstion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newTransaction),

@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { AuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext/ThemeContext";
+import { getAuth } from "firebase/auth";
 
 ChartJS.register(
   ArcElement,
@@ -31,11 +32,26 @@ const Reports = () => {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const auth = getAuth();
+        const token = await auth.currentUser.getIdToken();
+        const res = await axios.get(
+          `https://financeflow-tau-eight.vercel.app/addtranstion?email=${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setTransactions(res.data);
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      }
+    };
+
     if (user?.email) {
-      axios
-        .get(`http://localhost:3000/addtranstion?email=${user.email}`)
-        .then((res) => setTransactions(res.data))
-        .catch((err) => console.error(err));
+      fetchTransactions();
     }
   }, [user?.email]);
 
@@ -72,6 +88,12 @@ const Reports = () => {
           "#27ae60",
           "#3498db",
           "#2980b9",
+          "#9b59b6",
+          "#8e44ad",
+          "#f39c12",
+          "#d35400",
+          "#e74c3c",
+          "#c0392b",
         ],
       },
     ],

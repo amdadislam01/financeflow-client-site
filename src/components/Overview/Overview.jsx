@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaWallet, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext/ThemeContext";
+import { getAuth } from "firebase/auth";
 
 const Overview = () => {
   const { user } = useContext(AuthContext);
@@ -12,11 +13,28 @@ const Overview = () => {
   const [expense, setExpense] = useState(0);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const auth = getAuth();
+        const token = await auth.currentUser.getIdToken(); 
+
+        const res = await axios.get(
+          `https://financeflow-tau-eight.vercel.app/addtranstion?email=${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setTransactions(res.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     if (user?.email) {
-      axios
-        .get(`http://localhost:3000/addtranstion?email=${user.email}`)
-        .then((res) => setTransactions(res.data))
-        .catch((err) => console.error(err));
+      fetchData();
     }
   }, [user?.email]);
 
@@ -47,7 +65,6 @@ const Overview = () => {
   const expenseBg = isDarkMode
     ? "bg-gradient-to-r from-red-700 to-red-800 text-gray-200"
     : "bg-gradient-to-r from-red-100 to-red-200 text-gray-800";
-
 
   return (
     <div className={`${isDarkMode ? "bg-gray-900" : "bg-white"}`}>

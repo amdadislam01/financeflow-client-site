@@ -7,7 +7,7 @@ import Loading from "../../components/Loading/Loading";
 import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 const MyTransaction = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading: authLoading } = useContext(AuthContext);
   const { isDarkMode } = useTheme();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,16 +16,35 @@ const MyTransaction = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.email) {
-      fetch(`http://localhost:3000/addtranstion?email=${user.email}`)
-        .then((res) => res.json())
-        .then((data) => {
+    const fetchTransactions = async () => {
+      if (user?.email) {
+        try {
+          setLoading(true);
+          const token = await user.getIdToken();
+          const res = await fetch(
+            `https://financeflow-tau-eight.vercel.app/addtranstion?email=${user.email}`,
+            {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const data = await res.json();
           setTransactions(data);
+        } catch (error) {
+          console.error("Error fetching transactions:", error);
+        } finally {
           setLoading(false);
-        })
-        .catch(() => setLoading(false));
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    if (!authLoading) {
+      fetchTransactions();
     }
-  }, [user]);
+  }, [user, authLoading]);
 
   const handleDelete = (_id) => {
     Swal.fire({
@@ -38,11 +57,15 @@ const MyTransaction = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/addtranstion/${_id}`, { method: "DELETE" })
+        fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${_id}`, { method: "DELETE" })
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
-              Swal.fire("Deleted!", "Transaction removed successfully.", "success");
+              Swal.fire(
+                "Deleted!",
+                "Transaction removed successfully.",
+                "success"
+              );
               setTransactions(transactions.filter((t) => t._id !== _id));
             }
           })
@@ -69,7 +92,7 @@ const MyTransaction = () => {
       date: form.date.value,
     };
 
-    fetch(`http://localhost:3000/addtranstion/${selectedTransaction._id}`, {
+    fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${selectedTransaction._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
@@ -175,9 +198,7 @@ const MyTransaction = () => {
                 </p>
                 <p
                   className={`text-3xl font-extrabold ${
-                    item.type === "Income"
-                      ? "text-green-500"
-                      : "text-red-500"
+                    item.type === "Income" ? "text-green-500" : "text-red-500"
                   }`}
                 >
                   ৳{item.amount}
@@ -225,7 +246,10 @@ const MyTransaction = () => {
         )}
       </div>
 
-      <dialog ref={transactionsModal} className="modal modal-bottom sm:modal-middle">
+      <dialog
+        ref={transactionsModal}
+        className="modal modal-bottom sm:modal-middle"
+      >
         <div
           className={`modal-box max-w-md rounded-2xl shadow-lg transition-colors duration-500 ${
             isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"

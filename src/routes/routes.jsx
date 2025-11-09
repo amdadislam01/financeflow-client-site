@@ -10,6 +10,7 @@ import Reports from "../pages/Reports/Reports";
 import PrivetRoutes from "./PrivetRoutes";
 import MyProfile from "../pages/MyProfile/Myprofile";
 import TransactionDetails from "../pages/TransactionDetails/TransactionDetails";
+import ForgetPassword from "../pages/ForgetPassword/ForgetPassword";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "/signup",
         Component: SignUp,
+      },
+      {
+        path: "/forget-password",
+        element: <ForgetPassword />,
       },
       {
         path: "/add-transaction",
@@ -68,7 +73,9 @@ export const router = createBrowserRouter([
           </PrivetRoutes>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/addtranstion/${params.id}`),
+          fetch(
+            `https://financeflow-tau-eight.vercel.app/addtranstion/${params.id}`
+          ),
       },
     ],
   },

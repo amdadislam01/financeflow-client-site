@@ -38,7 +38,7 @@ const MyProfile = () => {
     e.preventDefault();
     try {
       await updateUserProfile(name, photo);
-      const res = await fetch(`http://localhost:3000/users/${user.email}`, {
+      const res = await fetch(`https://financeflow-tau-eight.vercel.app/users/${user.email}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
