@@ -21,6 +21,7 @@ const Navbar = () => {
   const { user, logoutUser, loading } = useContext(AuthContext);
   const { isDarkMode, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const navLinks = [
     { to: "/", label: "Home", icon: <FaHome /> },
@@ -48,8 +49,8 @@ const Navbar = () => {
           <div className={`${gradient} p-2 rounded-lg text-white`}>
             <MdAccountBalanceWallet className="text-xl" />
           </div>
-          <span className="font-extrabold text-xl group-hover:text-teal-500 transition">
-            <span className={`font-extrabold text-xl ${textColor} group-hover:text-teal-500 transition`}>Finance</span><span className="text-teal-500">Flow</span>
+          <span className={`font-extrabold text-xl ${textColor}`}>
+            Finance<span className="text-teal-500">Flow</span>
           </span>
         </NavLink>
 
@@ -73,7 +74,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3 relative">
           <button
             onClick={toggleTheme}
             className={`${textColor} p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition`}
@@ -101,27 +102,35 @@ const Navbar = () => {
               </NavLink>
             </>
           ) : (
-            <div className="flex items-center gap-3">
-              <div className="relative group cursor-pointer">
+            <div className="relative">
+              <div
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
                 <img
                   src={user?.photoURL || user.reloadUserInfo.photoURL}
                   alt="Profile"
                   className="w-10 h-10 rounded-full border-2 border-teal-500"
                 />
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-white shadow-lg rounded-xl p-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 text-center z-50 cursor-pointer">
-                  <p className="text-sm font-semibold text-gray-800">
+              </div>
+
+              {profileOpen && (
+                <div className={`${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"} absolute right-0 mt-3 w-56 shadow-lg rounded-xl p-4`}>
+                  <p className="text-sm font-semibold text-center">
                     {user.displayName || user.reloadUserInfo.displayName}
                   </p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
+                  <p className="text-xs text-gray-500 text-center mb-3">
+                    {user.email}
+                  </p>
+                  <button
+                    onClick={logoutUser}
+                    className={`${gradient} text-white w-full py-2 rounded-md font-medium hover:opacity-90 transition cursor-pointer`}
+                  >
+                    <FaSignOutAlt className="inline mr-2" />
+                    Logout
+                  </button>
                 </div>
-              </div>
-              <button
-                onClick={logoutUser}
-                className={`${gradient} text-white px-4 py-2 rounded-md font-medium hover:opacity-90 transition cursor-pointer`}
-              >
-                <FaSignOutAlt className="inline mr-2" />
-                Logout
-              </button>
+              )}
             </div>
           )}
         </div>
@@ -185,16 +194,29 @@ const Navbar = () => {
                 </NavLink>
               </>
             ) : (
-              <button
-                onClick={() => {
-                  logoutUser();
-                  setIsOpen(false);
-                }}
-                className={`${gradient} flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium text-white hover:opacity-90 transition cursor-pointer`}
-              >
-                <FaSignOutAlt />
-                Logout
-              </button>
+              <div className="flex flex-col items-center mt-2">
+                <img
+                  src={user?.photoURL || user.reloadUserInfo.photoURL}
+                  alt="Profile"
+                  className="w-12 h-12 rounded-full border-2 border-teal-500 mb-2"
+                />
+                <p className="text-sm font-semibold text-center">
+                  {user.displayName || user.reloadUserInfo.displayName}
+                </p>
+                <p className="text-xs text-gray-500 text-center mb-3">
+                  {user.email}
+                </p>
+                <button
+                  onClick={() => {
+                    logoutUser();
+                    setIsOpen(false);
+                  }}
+                  className={`${gradient} flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium text-white hover:opacity-90 transition cursor-pointer w-full cursor-pointer`}
+                >
+                  <FaSignOutAlt />
+                  Logout
+                </button>
+              </div>
             )}
           </div>
         </div>
