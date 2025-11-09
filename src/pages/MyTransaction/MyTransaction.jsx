@@ -4,7 +4,6 @@ import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import Loading from "../../components/Loading/Loading";
-import { toast } from "react-toastify";
 
 const MyTransaction = () => {
   const { user } = useContext(AuthContext);
@@ -13,7 +12,6 @@ const MyTransaction = () => {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const transactionsModal = useRef(null);
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     if (user?.email) {
@@ -81,18 +79,29 @@ const MyTransaction = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          toast.success("Transaction updated successfully!");
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: "Transaction updated successfully!",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+
           setTransactions((prev) =>
             prev.map((t) =>
               t._id === selectedTransaction._id ? { ...t, ...updatedData } : t
             )
           );
           transactionsModal.current.close();
-        } else {
-          toast.info("No changes made.");
         }
       })
-      .catch(() => toast.error("Update failed. Try again later."));
+      .catch(() =>
+        Swal.fire({
+          icon: "error",
+          title: "Update failed",
+          text: "Try again later.",
+        })
+      );
   };
 
   if (loading) return <Loading />;
@@ -160,7 +169,7 @@ const MyTransaction = () => {
                   <FaTrashAlt /> Delete
                 </button>
                 <button
-                  onClick={() => navigate(`/transactions/${item._id}`)}
+                  onClick={() => navigate(`/transaction-details/${item._id}`)}
                   className="flex items-center gap-2 text-teal-700 hover:text-green-600 font-semibold text-sm transition cursor-pointer"
                 >
                   <FaEye /> View

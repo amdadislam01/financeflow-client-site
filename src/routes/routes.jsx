@@ -9,6 +9,7 @@ import PageNotFound from "../pages/PageNotFound/PageNotFound";
 import Reports from "../pages/Reports/Reports";
 import PrivetRoutes from "./PrivetRoutes";
 import MyProfile from "../pages/MyProfile/Myprofile";
+import TransactionDetails from "../pages/TransactionDetails/TransactionDetails";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -28,21 +29,45 @@ export const router = createBrowserRouter([
         Component: SignUp,
       },
       {
-        path:'/add-transaction',
-        element: <PrivetRoutes><AddTransaction /></PrivetRoutes>
+        path: "/add-transaction",
+        element: (
+          <PrivetRoutes>
+            <AddTransaction />
+          </PrivetRoutes>
+        ),
       },
       {
-        path: '/my-transactions',
-        element: <PrivetRoutes><MyTransaction /></PrivetRoutes>
+        path: "/my-transactions",
+        element: (
+          <PrivetRoutes>
+            <MyTransaction />
+          </PrivetRoutes>
+        ),
       },
       {
-        path: '/reports',
-        Component: Reports
+        path: "/reports",
+        Component: Reports,
       },
       {
-        path: '/profile',
-        element: <PrivetRoutes><MyProfile></MyProfile></PrivetRoutes>
-      }
+        path: "/profile",
+        element: (
+          <PrivetRoutes>
+            <MyProfile></MyProfile>
+          </PrivetRoutes>
+        ),
+      },
+      {
+        path: "/transaction-details/:id",
+        element: (
+          <PrivetRoutes>
+            <TransactionDetails />
+          </PrivetRoutes>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `http://localhost:3000/addtranstion/${params.id}`
+          ),
+      },
     ],
   },
 ]);
