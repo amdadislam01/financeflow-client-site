@@ -4,12 +4,14 @@ import { FaFacebook, FaLinkedinIn, FaGithub, FaInstagram } from 'react-icons/fa'
 import { RiTwitterXLine } from "react-icons/ri";
 import { HiOutlineMail } from 'react-icons/hi'
 import { MdAccountBalanceWallet } from 'react-icons/md'
+import { useTheme } from '../../context/ThemeContext/ThemeContext'
 
 const Footer = () => {
+  const { isDarkMode } = useTheme()
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className={`${isDarkMode ? 'bg-gray-900 border-t border-gray-700 text-gray-300' : 'bg-gray-100 text-gray-900'} transition-colors duration-500`}>
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="space-y-6">
@@ -19,7 +21,7 @@ const Footer = () => {
               </div>
               <h2 className="text-xl font-bold text-teal-400">FinanceFlow</h2>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm leading-relaxed`}>
               Take control of your finances with FinanceFlow — track expenses, set goals, and build your financial freedom confidently.
             </p>
             <div className="flex items-center space-x-4">
@@ -42,7 +44,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Finance Tools</h3>
+            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Finance Tools</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-400 hover:text-teal-400 transition-colors text-sm">Dashboard Overview</Link></li>
               <li><Link to="/" className="text-gray-400 hover:text-teal-400 transition-colors text-sm">Budget Planner</Link></li>
@@ -53,7 +55,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Support</h3>
+            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Support</h3>
             <ul className="space-y-2">
               <li><Link to="/faq" className="text-gray-400 hover:text-teal-400 transition-colors text-sm">FAQs</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-teal-400 transition-colors text-sm">Contact Us</Link></li>
@@ -64,17 +66,21 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Stay in Control</h3>
-            <p className="text-gray-400 text-sm">
+            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Stay in Control</h3>
+            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>
               Get financial tips and updates to make smarter money decisions.
             </p>
             <form className="space-y-2">
               <div className="relative">
-                <HiOutlineMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
+                <HiOutlineMail className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} size={18} />
                 <input
                   type="email"
                   placeholder="Your email address"
-                  className="pl-10 pr-3 py-2 w-full bg-gray-800 border border-gray-700 rounded-lg focus:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200 text-sm text-gray-100 placeholder-gray-500"
+                  className={`pl-10 pr-3 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200 text-sm placeholder-gray-500 ${
+                    isDarkMode
+                      ? 'bg-gray-800 border-gray-700 text-gray-100 focus:bg-gray-900'
+                      : 'bg-gray-50 border-gray-300 text-gray-800 focus:bg-white'
+                  }`}
                 />
               </div>
               <button
@@ -91,7 +97,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 py-6">
+      <div className={`${isDarkMode ? 'border-gray-800' : 'border-gray-200'} border-t py-6`}>
         <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div className="text-sm text-gray-500">

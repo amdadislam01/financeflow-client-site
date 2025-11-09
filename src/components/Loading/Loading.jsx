@@ -1,9 +1,13 @@
 import React from 'react'
 import { MdAccountBalanceWallet } from 'react-icons/md'
+import { useTheme } from '../../context/ThemeContext/ThemeContext'
 
 const Loading = () => {
+  const { isDarkMode } = useTheme()
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-transparent text-white z-50">
+    <div className={`fixed inset-0 flex flex-col items-center justify-center z-50 transition-colors duration-500 ${
+      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'
+    }`}>
       <div className="relative w-24 h-24">
         <div className="absolute inset-0 rounded-full border-4 border-t-[#10B981] border-b-[#14B8A6] border-l-transparent border-r-transparent animate-spin-slow"></div>
       </div>

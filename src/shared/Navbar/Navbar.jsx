@@ -10,12 +10,16 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
+  FaSun,
+  FaMoon,
 } from "react-icons/fa";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 const Navbar = () => {
-  const { user, logoutUser, loading } = useContext(AuthContext);  
+  const { user, logoutUser, loading } = useContext(AuthContext);
+  const { isDarkMode, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
@@ -30,17 +34,22 @@ const Navbar = () => {
       : []),
   ];
 
-  const gradient = "bg-gradient-to-r from-green-600 to-teal-600";
+  const gradient = isDarkMode
+    ? "bg-gradient-to-r from-green-600 to-teal-600"
+    : "bg-gradient-to-r from-green-600 to-teal-600";
+  const textColor = isDarkMode ? "text-gray-200" : "text-gray-800";
+  const hoverBg = isDarkMode ? "hover:bg-gray-800" : "hover:bg-teal-50";
+  const borderColor = isDarkMode ? "border-gray-600" : "border-teal-600";
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <header className={`${isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} sticky top-0 z-50 border-b shadow-sm`}>
       <nav className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between h-16">
         <NavLink to="/" className="flex items-center gap-2 group">
           <div className={`${gradient} p-2 rounded-lg text-white`}>
             <MdAccountBalanceWallet className="text-xl" />
           </div>
-          <span className="font-extrabold text-xl text-gray-800 group-hover:text-teal-600 transition">
-            Finance<span className="text-teal-600">Flow</span>
+          <span className="font-extrabold text-xl group-hover:text-teal-500 transition">
+            <span className={`font-extrabold text-xl ${textColor} group-hover:text-teal-500 transition`}>Finance</span><span className="text-teal-500">Flow</span>
           </span>
         </NavLink>
 
@@ -53,8 +62,8 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200 ${
                   isActive
-                    ? "border border-teal-600 text-teal-600 font-semibold bg-transparent"
-                    : "text-gray-700 hover:text-teal-600 hover:border-teal-500 hover:border hover:bg-teal-50"
+                    ? `border ${borderColor} text-teal-500 font-semibold bg-transparent`
+                    : `${textColor} hover:text-teal-500 hover:border ${borderColor} ${hoverBg}`
                 }`
               }
             >
@@ -65,8 +74,15 @@ const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className={`${textColor} p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition`}
+          >
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </button>
+
           {loading ? (
-            <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
+            <div className={`w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin`} />
           ) : !user ? (
             <>
               <NavLink
@@ -78,7 +94,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/signup"
-                className="px-4 py-2 rounded-md font-medium border border-teal-600 text-teal-600 hover:bg-teal-50 transition"
+                className={`px-4 py-2 rounded-md font-medium border ${borderColor} text-teal-500 hover:bg-teal-50 transition`}
               >
                 <FaUserPlus className="inline mr-2" />
                 Signup
@@ -90,7 +106,7 @@ const Navbar = () => {
                 <img
                   src={user?.photoURL || user.reloadUserInfo.photoURL}
                   alt="Profile"
-                  className="w-10 h-10 rounded-full border-2 border-teal-600"
+                  className="w-10 h-10 rounded-full border-2 border-teal-500"
                 />
                 <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-white shadow-lg rounded-xl p-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 text-center z-50 cursor-pointer">
                   <p className="text-sm font-semibold text-gray-800">
@@ -112,14 +128,14 @@ const Navbar = () => {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden text-teal-600 text-2xl focus:outline-none"
+          className={`${textColor} text-2xl lg:hidden focus:outline-none`}
         >
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>
       </nav>
 
       {isOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-md">
+        <div className={`${isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} lg:hidden border-t shadow-md`}>
           <div className="flex flex-col gap-2 px-4 py-3">
             {navLinks.map((link) => (
               <NavLink
@@ -129,8 +145,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200 ${
                     isActive
-                      ? "border border-teal-600 text-teal-600 font-semibold bg-transparent"
-                      : "text-gray-700 hover:text-teal-600 hover:border-teal-500 hover:border hover:bg-teal-50"
+                      ? `border ${borderColor} text-teal-500 font-semibold bg-transparent`
+                      : `${textColor} hover:text-teal-500 hover:border ${borderColor} ${hoverBg}`
                   }`
                 }
                 onClick={() => setIsOpen(false)}
@@ -140,8 +156,15 @@ const Navbar = () => {
               </NavLink>
             ))}
 
+            <button
+              onClick={toggleTheme}
+              className={`${textColor} p-2 rounded-md dark:hover:bg-gray-700 transition flex items-center justify-center cursor-pointer`}
+            >
+              {isDarkMode ? <FaSun /> : <FaMoon />}
+            </button>
+
             {loading ? (
-              <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto my-2" />
+              <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto my-2" />
             ) : !user ? (
               <>
                 <NavLink
@@ -154,7 +177,7 @@ const Navbar = () => {
                 </NavLink>
                 <NavLink
                   to="/signup"
-                  className="flex items-center justify-center px-5 py-2 rounded-md font-medium border border-teal-600 text-teal-600 hover:bg-teal-50 transition cursor-pointer"
+                  className={`flex items-center justify-center px-5 py-2 rounded-md font-medium border ${borderColor} text-teal-500 hover:bg-teal-50 transition cursor-pointer`}
                   onClick={() => setIsOpen(false)}
                 >
                   <FaUserPlus className="inline mr-2" />

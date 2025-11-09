@@ -1,5 +1,6 @@
 import React from "react";
 import { FaBullseye, FaBalanceScale, FaShieldAlt } from "react-icons/fa";
+import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 const benefits = [
   {
@@ -26,29 +27,53 @@ const benefits = [
 ];
 
 const WhyFinancialPlanning = () => {
+  const { isDarkMode } = useTheme();
   return (
-    <section className="py-20">
+    <section
+      className={`py-20 transition-colors duration-500 ${
+        isDarkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-800"
+      }`}
+    >
       <div className="max-w-[1520px] mx-auto px-8 text-center">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">
+        <h2
+          className={`text-4xl font-bold mb-4 ${
+            isDarkMode ? "text-white" : "text-gray-800"
+          }`}
+        >
           Why Financial Planning Matters
         </h2>
-        <p className="text-gray-600 text-lg mb-12 max-w-3xl mx-auto">
-          Financial planning empowers you to manage your money wisely, achieve your goals, and secure your future. With a well-structured plan, you can minimize debt, maximize savings, and ensure peace of mind for yourself and your family.
+        <p
+          className={`text-lg mb-12 max-w-3xl mx-auto ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
+        >
+          Financial planning empowers you to manage your money wisely, achieve
+          your goals, and secure your future. With a well-structured plan, you
+          can minimize debt, maximize savings, and ensure peace of mind for
+          yourself and your family.
         </p>
 
         <div className="grid md:grid-cols-3 gap-10">
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 flex flex-col items-center text-center"
+              className={`p-8 rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 flex flex-col items-center text-center ${
+                isDarkMode ? "bg-gray-800" : "bg-white"
+              }`}
             >
               <div className={`${benefit.bgColor} text-white p-5 rounded-full mb-5`}>
                 {benefit.icon}
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">
+              <h3
+                className={`text-xl font-semibold mb-3 ${
+                  isDarkMode ? "text-white" : "text-gray-800"
+                }`}
+              >
                 {benefit.title}
               </h3>
-              <p className="text-gray-600">{benefit.description}</p>
+              <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                {benefit.description}
+              </p>
             </div>
           ))}
         </div>

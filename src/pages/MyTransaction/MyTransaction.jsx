@@ -4,9 +4,11 @@ import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import Loading from "../../components/Loading/Loading";
+import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 const MyTransaction = () => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -40,11 +42,7 @@ const MyTransaction = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
-              Swal.fire(
-                "Deleted!",
-                "Transaction removed successfully.",
-                "success"
-              );
+              Swal.fire("Deleted!", "Transaction removed successfully.", "success");
               setTransactions(transactions.filter((t) => t._id !== _id));
             }
           })
@@ -86,7 +84,6 @@ const MyTransaction = () => {
             timer: 2000,
             showConfirmButton: false,
           });
-
           setTransactions((prev) =>
             prev.map((t) =>
               t._id === selectedTransaction._id ? { ...t, ...updatedData } : t
@@ -107,8 +104,20 @@ const MyTransaction = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 pb-24">
-      <div className="bg-gradient-to-r from-green-600 via-teal-500 to-teal-400 py-16 text-center text-white shadow-xl">
+    <div
+      className={`min-h-screen pb-24 transition-colors duration-500 ${
+        isDarkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100"
+          : "bg-gradient-to-br from-green-50 to-teal-50 text-gray-800"
+      }`}
+    >
+      <div
+        className={`py-16 text-center shadow-xl transition-colors duration-500 ${
+          isDarkMode
+            ? "bg-gradient-to-r from-green-800 via-teal-700 to-teal-600 text-white"
+            : "bg-gradient-to-r from-green-600 via-teal-500 to-teal-400 text-white"
+        }`}
+      >
         <h1 className="text-5xl font-extrabold tracking-wider drop-shadow-lg">
           My Transactions
         </h1>
@@ -122,9 +131,19 @@ const MyTransaction = () => {
           transactions.map((item) => (
             <div
               key={item._id}
-              className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border border-gray-200 overflow-hidden group cursor-pointer"
+              className={`rounded-3xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border overflow-hidden group cursor-pointer ${
+                isDarkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
             >
-              <div className="bg-gradient-to-r from-green-400 via-teal-400 to-teal-300 px-5 py-3 flex justify-between items-center">
+              <div
+                className={`px-5 py-3 flex justify-between items-center ${
+                  isDarkMode
+                    ? "bg-gradient-to-r from-green-700 via-teal-700 to-teal-600"
+                    : "bg-gradient-to-r from-green-400 via-teal-400 to-teal-300"
+                }`}
+              >
                 <span
                   className={`px-4 py-1 text-xs font-semibold rounded-full ${
                     item.type === "Income"
@@ -140,22 +159,38 @@ const MyTransaction = () => {
               </div>
 
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                <h3
+                  className={`text-2xl font-bold mb-2 ${
+                    isDarkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
                   {item.category}
                 </h3>
-                <p className="text-gray-500 mb-4 text-sm leading-relaxed">
+                <p
+                  className={`mb-4 text-sm leading-relaxed ${
+                    isDarkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
                   {item.description}
                 </p>
                 <p
                   className={`text-3xl font-extrabold ${
-                    item.type === "Income" ? "text-green-800" : "text-red-600"
+                    item.type === "Income"
+                      ? "text-green-500"
+                      : "text-red-500"
                   }`}
                 >
                   ৳{item.amount}
                 </p>
               </div>
 
-              <div className="flex justify-between items-center border-t border-gray-100 px-6 py-4 bg-green-50">
+              <div
+                className={`flex justify-between items-center px-6 py-4 border-t transition-colors duration-300 ${
+                  isDarkMode
+                    ? "bg-gray-900 border-gray-700"
+                    : "bg-green-50 border-gray-100"
+                }`}
+              >
                 <button
                   onClick={() => handleOpenUpdateModal(item)}
                   className="flex items-center gap-2 text-green-600 hover:text-teal-500 font-semibold text-sm transition cursor-pointer"
@@ -179,41 +214,45 @@ const MyTransaction = () => {
           ))
         ) : (
           <div className="col-span-full text-center mt-24">
-            <p className="text-gray-500 text-lg">
+            <p
+              className={`text-lg ${
+                isDarkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
               No transactions yet. Start by adding your first transaction!
             </p>
           </div>
         )}
       </div>
 
-      {/*  Transaction  Modal */}
-      <dialog
-        ref={transactionsModal}
-        className="modal modal-bottom sm:modal-middle"
-      >
-        <div className="modal-box max-w-md bg-white rounded-2xl shadow-lg">
-          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
+      <dialog ref={transactionsModal} className="modal modal-bottom sm:modal-middle">
+        <div
+          className={`modal-box max-w-md rounded-2xl shadow-lg transition-colors duration-500 ${
+            isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+          }`}
+        >
+          <h2 className="text-2xl font-semibold text-center mb-6">
             Update Transaction
           </h2>
-
           {selectedTransaction && (
             <form onSubmit={handleUpdateSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type
-                </label>
+                <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   name="type"
                   defaultValue={selectedTransaction.type}
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                    isDarkMode
+                      ? "bg-gray-900 border-gray-700 text-gray-100"
+                      : "border-gray-200"
+                  }`}
                 >
                   <option value="Income">Income</option>
                   <option value="Expense">Expense</option>
                 </select>
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Category
                 </label>
                 <input
@@ -221,48 +260,56 @@ const MyTransaction = () => {
                   name="category"
                   defaultValue={selectedTransaction.category}
                   required
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                    isDarkMode
+                      ? "bg-gray-900 border-gray-700 text-gray-100"
+                      : "border-gray-200"
+                  }`}
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Amount
-                </label>
+                <label className="block text-sm font-medium mb-1">Amount</label>
                 <input
                   type="number"
                   name="amount"
                   defaultValue={selectedTransaction.amount}
                   required
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                    isDarkMode
+                      ? "bg-gray-900 border-gray-700 text-gray-100"
+                      : "border-gray-200"
+                  }`}
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Description
                 </label>
                 <textarea
                   name="description"
                   defaultValue={selectedTransaction.description}
                   rows="2"
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                    isDarkMode
+                      ? "bg-gray-900 border-gray-700 text-gray-100"
+                      : "border-gray-200"
+                  }`}
                 ></textarea>
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date
-                </label>
+                <label className="block text-sm font-medium mb-1">Date</label>
                 <input
                   type="date"
                   name="date"
                   defaultValue={selectedTransaction.date?.slice(0, 10)}
                   required
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                    isDarkMode
+                      ? "bg-gray-900 border-gray-700 text-gray-100"
+                      : "border-gray-200"
+                  }`}
                 />
               </div>
-
               <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"

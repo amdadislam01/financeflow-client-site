@@ -11,6 +11,7 @@ import {
   BarElement,
 } from "chart.js";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 ChartJS.register(
   ArcElement,
@@ -23,6 +24,7 @@ ChartJS.register(
 
 const Reports = () => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [transactions, setTransactions] = useState([]);
   const [filterMonth, setFilterMonth] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -107,60 +109,112 @@ const Reports = () => {
   };
 
   return (
-    <div className="p-6 max-w-[1200px] mx-auto">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-teal-700">
-        Financial Reports
-      </h1>
-
-      <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center items-center">
-        <select
-          value={filterMonth}
-          onChange={(e) => setFilterMonth(e.target.value)}
-          className="border-2 border-teal-400 p-3 rounded-lg w-64 text-gray-700 font-medium hover:border-teal-600 transition cursor-pointer"
+    <div
+      className={`min-h-screen w-full transition-colors duration-500 ${
+        isDarkMode
+          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100"
+          : "bg-gradient-to-br from-green-50 to-teal-50 text-gray-800"
+      }`}
+    >
+      <div className="p-6 max-w-[1200px] mx-auto">
+        <h1
+          className={`text-4xl font-extrabold mb-8 text-center ${
+            isDarkMode ? "text-teal-400" : "text-teal-700"
+          }`}
         >
-          <option value="">All Months</option>
-          {[...Array(12)].map((_, i) => (
-            <option value={i} key={i}>
-              {new Date(0, i).toLocaleString("default", { month: "long" })}
-            </option>
-          ))}
-        </select>
+          Financial Reports
+        </h1>
 
-        <select
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-          className="border-2 border-teal-400 p-3 rounded-lg w-64 text-gray-700 font-medium hover:border-teal-600 transition cursor-pointer"
-        >
-          <option value="">All Categories</option>
-          {[...new Set(transactions.map((t) => t.category))].map((cat) => (
-            <option value={cat} key={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center items-center">
+          <select
+            value={filterMonth}
+            onChange={(e) => setFilterMonth(e.target.value)}
+            className={`p-3 rounded-lg w-64 font-medium transition cursor-pointer border-2 ${
+              isDarkMode
+                ? "bg-gray-800 border-teal-600 text-gray-200 hover:border-teal-400"
+                : "border-teal-400 text-gray-700 hover:border-teal-600"
+            }`}
+          >
+            <option value="">All Months</option>
+            {[...Array(12)].map((_, i) => (
+              <option value={i} key={i}>
+                {new Date(0, i).toLocaleString("default", { month: "long" })}
+              </option>
+            ))}
+          </select>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-gradient-to-br from-teal-100 to-green-50 p-6 rounded-xl shadow-xl hover:shadow-2xl transition">
-          <h2 className="text-2xl font-semibold mb-4 text-teal-800">
-            Expenses by Category
-          </h2>
-          {filteredData.length > 0 ? (
-            <Pie data={pieData} />
-          ) : (
-            <p className="text-gray-500 text-center mt-6">No data available</p>
-          )}
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className={`p-3 rounded-lg w-64 font-medium transition cursor-pointer border-2 ${
+              isDarkMode
+                ? "bg-gray-800 border-teal-600 text-gray-200 hover:border-teal-400"
+                : "border-teal-400 text-gray-700 hover:border-teal-600"
+            }`}
+          >
+            <option value="">All Categories</option>
+            {[...new Set(transactions.map((t) => t.category))].map((cat) => (
+              <option value={cat} key={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="bg-gradient-to-br from-teal-100 to-green-50 p-6 rounded-xl shadow-xl hover:shadow-2xl transition">
-          <h2 className="text-2xl font-semibold mb-4 text-teal-800">
-            Monthly Expenses
-          </h2>
-          {filteredData.length > 0 ? (
-            <Bar data={barData} options={{ responsive: true }} />
-          ) : (
-            <p className="text-gray-500 text-center mt-6">No data available</p>
-          )}
+        <div className="grid md:grid-cols-2 gap-8">
+          <div
+            className={`p-6 rounded-xl shadow-xl hover:shadow-2xl transition ${
+              isDarkMode
+                ? "bg-gradient-to-br from-gray-800 to-gray-700"
+                : "bg-gradient-to-br from-teal-100 to-green-50"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-semibold mb-4 ${
+                isDarkMode ? "text-teal-300" : "text-teal-800"
+              }`}
+            >
+              Expenses by Category
+            </h2>
+            {filteredData.length > 0 ? (
+              <Pie data={pieData} />
+            ) : (
+              <p
+                className={`text-center mt-6 ${
+                  isDarkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                No data available
+              </p>
+            )}
+          </div>
+
+          <div
+            className={`p-6 rounded-xl shadow-xl hover:shadow-2xl transition ${
+              isDarkMode
+                ? "bg-gradient-to-br from-gray-800 to-gray-700"
+                : "bg-gradient-to-br from-teal-100 to-green-50"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-semibold mb-4 ${
+                isDarkMode ? "text-teal-300" : "text-teal-800"
+              }`}
+            >
+              Monthly Expenses
+            </h2>
+            {filteredData.length > 0 ? (
+              <Bar data={barData} options={{ responsive: true }} />
+            ) : (
+              <p
+                className={`text-center mt-6 ${
+                  isDarkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                No data available
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

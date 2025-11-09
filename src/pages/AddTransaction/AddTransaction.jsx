@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext/ThemeContext";
 
 const AddTransaction = () => {
   const { user } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [type, setType] = useState("Expense");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
@@ -42,9 +44,7 @@ const AddTransaction = () => {
     try {
       const res = await fetch("http://localhost:3000/addtranstion", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newTransaction),
       });
 
@@ -57,7 +57,6 @@ const AddTransaction = () => {
           text: "Your transaction has been successfully added.",
           confirmButtonColor: "#0d9488",
         });
-
         setCategory("");
         setAmount("");
         setDescription("");
@@ -69,8 +68,7 @@ const AddTransaction = () => {
           text: "Something went wrong. Please try again.",
         });
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch {
       Swal.fire({
         icon: "error",
         title: "Network Error",
@@ -80,13 +78,33 @@ const AddTransaction = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 py-16 flex items-center">
-      <div className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-10 border border-teal-50">
+    <section
+      className={`min-h-screen py-16 flex items-center transition-all duration-300 ${
+        isDarkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-green-50 to-teal-100"
+      }`}
+    >
+      <div
+        className={`w-full max-w-3xl mx-auto rounded-2xl shadow-xl p-10 border transition-all duration-300 ${
+          isDarkMode
+            ? "bg-gray-900 border-gray-700"
+            : "bg-white border-teal-50"
+        }`}
+      >
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-extrabold text-teal-800 mb-2 tracking-tight">
+          <h2
+            className={`text-4xl font-extrabold mb-2 tracking-tight ${
+              isDarkMode ? "text-teal-400" : "text-teal-800"
+            }`}
+          >
             Add New Transaction
           </h2>
-          <p className="text-gray-600 text-base">
+          <p
+            className={`text-base ${
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             Record your income or expenses to track your financial journey
           </p>
         </div>
@@ -94,7 +112,11 @@ const AddTransaction = () => {
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 Type
               </label>
               <select
@@ -103,7 +125,11 @@ const AddTransaction = () => {
                   setType(e.target.value);
                   setCategory("");
                 }}
-                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+                className={`w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150 ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-200"
+                    : "border border-gray-300 text-gray-700"
+                }`}
               >
                 <option value="Expense">Expense</option>
                 <option value="Income">Income</option>
@@ -111,19 +137,27 @@ const AddTransaction = () => {
             </div>
 
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
+                className={`w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150 ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-200"
+                    : "border border-gray-300 text-gray-700"
+                }`}
               >
                 <option value="">Select Category</option>
                 {(type === "Expense" ? expenseList : incomeList).map(
-                  (item, index) => (
-                    <option key={index} value={item}>
+                  (item, i) => (
+                    <option key={i} value={item}>
                       {item}
                     </option>
                   )
@@ -131,9 +165,14 @@ const AddTransaction = () => {
               </select>
             </div>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 Amount
               </label>
               <input
@@ -141,27 +180,43 @@ const AddTransaction = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Enter amount"
-                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
+                className={`w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150 ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-200"
+                    : "border border-gray-300 text-gray-700"
+                }`}
               />
             </div>
 
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 Date
               </label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
+                className={`w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150 ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-200"
+                    : "border border-gray-300 text-gray-700"
+                }`}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-2">
+            <label
+              className={`block font-medium mb-2 ${
+                isDarkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               Description
             </label>
             <textarea
@@ -169,31 +224,51 @@ const AddTransaction = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Write a short note..."
               rows="3"
-              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+              className={`w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150 ${
+                isDarkMode
+                  ? "border border-gray-700 bg-gray-800 text-gray-200"
+                  : "border border-gray-300 text-gray-700"
+              }`}
             ></textarea>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 User Email
               </label>
               <input
                 type="email"
                 value={user?.email || ""}
                 readOnly
-                className="w-full border border-gray-200 rounded-lg p-3 outline-none bg-gray-50 text-gray-500 cursor-not-allowed"
+                className={`w-full rounded-lg p-3 outline-none cursor-not-allowed ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-400"
+                    : "border border-gray-200 bg-gray-50 text-gray-500"
+                }`}
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label
+                className={`block font-medium mb-2 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 User Name
               </label>
               <input
                 type="text"
                 value={user?.displayName || ""}
                 readOnly
-                className="w-full border border-gray-200 rounded-lg p-3 outline-none bg-gray-50 text-gray-500 cursor-not-allowed"
+                className={`w-full rounded-lg p-3 outline-none cursor-not-allowed ${
+                  isDarkMode
+                    ? "border border-gray-700 bg-gray-800 text-gray-400"
+                    : "border border-gray-200 bg-gray-50 text-gray-500"
+                }`}
               />
             </div>
           </div>
@@ -201,7 +276,11 @@ const AddTransaction = () => {
           <div className="text-center pt-4">
             <button
               type="submit"
-              className="px-12 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className={`px-12 py-3 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-teal-500 to-green-600"
+                  : "bg-gradient-to-r from-green-600 to-teal-600"
+              }`}
             >
               Add Transaction
             </button>
