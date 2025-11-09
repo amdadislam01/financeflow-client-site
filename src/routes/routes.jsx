@@ -46,7 +46,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/reports",
-        Component: Reports,
+        element: (
+          <PrivetRoutes>
+            <Reports />
+          </PrivetRoutes>
+        ),
       },
       {
         path: "/profile",
@@ -64,9 +68,7 @@ export const router = createBrowserRouter([
           </PrivetRoutes>
         ),
         loader: ({ params }) =>
-          fetch(
-            `http://localhost:3000/addtranstion/${params.id}`
-          ),
+          fetch(`http://localhost:3000/addtranstion/${params.id}`),
       },
     ],
   },
