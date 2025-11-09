@@ -1,15 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import Loading from "../../components/Loading/Loading";
+import { toast } from "react-toastify";
 
 const MyTransaction = () => {
   const { user } = useContext(AuthContext);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const transactionsModal = useRef(null);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (user?.email) {
@@ -38,23 +42,57 @@ const MyTransaction = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Transaction removed successfully.",
-                icon: "success",
-              });
+              Swal.fire(
+                "Deleted!",
+                "Transaction removed successfully.",
+                "success"
+              );
               setTransactions(transactions.filter((t) => t._id !== _id));
             }
           })
           .catch(() => {
-            Swal.fire({
-              title: "Error!",
-              text: "Something went wrong. Try again.",
-              icon: "error",
-            });
+            Swal.fire("Error!", "Something went wrong. Try again.", "error");
           });
       }
     });
+  };
+
+  const handleOpenUpdateModal = (transaction) => {
+    setSelectedTransaction(transaction);
+    transactionsModal.current.showModal();
+  };
+
+  const handleUpdateSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const updatedData = {
+      type: form.type.value,
+      category: form.category.value,
+      amount: form.amount.value,
+      description: form.description.value,
+      date: form.date.value,
+    };
+
+    fetch(`http://localhost:3000/addtranstion/${selectedTransaction._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          toast.success("Transaction updated successfully!");
+          setTransactions((prev) =>
+            prev.map((t) =>
+              t._id === selectedTransaction._id ? { ...t, ...updatedData } : t
+            )
+          );
+          transactionsModal.current.close();
+        } else {
+          toast.info("No changes made.");
+        }
+      })
+      .catch(() => toast.error("Update failed. Try again later."));
   };
 
   if (loading) return <Loading />;
@@ -100,7 +138,7 @@ const MyTransaction = () => {
                   {item.description}
                 </p>
                 <p
-                  className={`text-3xl font-extrabold text-green-600  ${
+                  className={`text-3xl font-extrabold ${
                     item.type === "Income" ? "text-green-800" : "text-red-600"
                   }`}
                 >
@@ -110,7 +148,7 @@ const MyTransaction = () => {
 
               <div className="flex justify-between items-center border-t border-gray-100 px-6 py-4 bg-green-50">
                 <button
-                  onClick={() => navigate(`/transactions/update/${item._id}`)}
+                  onClick={() => handleOpenUpdateModal(item)}
                   className="flex items-center gap-2 text-green-600 hover:text-teal-500 font-semibold text-sm transition cursor-pointer"
                 >
                   <FaEdit /> Update
@@ -138,6 +176,103 @@ const MyTransaction = () => {
           </div>
         )}
       </div>
+
+      {/*  Transaction  Modal */}
+      <dialog
+        ref={transactionsModal}
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box max-w-md bg-white rounded-2xl shadow-lg">
+          <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
+            Update Transaction
+          </h2>
+
+          {selectedTransaction && (
+            <form onSubmit={handleUpdateSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Type
+                </label>
+                <select
+                  name="type"
+                  defaultValue={selectedTransaction.type}
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                >
+                  <option value="Income">Income</option>
+                  <option value="Expense">Expense</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  name="category"
+                  defaultValue={selectedTransaction.category}
+                  required
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  name="amount"
+                  defaultValue={selectedTransaction.amount}
+                  required
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  defaultValue={selectedTransaction.description}
+                  rows="2"
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  defaultValue={selectedTransaction.date?.slice(0, 10)}
+                  required
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => transactionsModal.current.close()}
+                  className="px-5 py-2 rounded-md border border-green-400 text-green-600 hover:bg-green-50 transition font-medium cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition font-medium cursor-pointer"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </dialog>
     </div>
   );
 };
