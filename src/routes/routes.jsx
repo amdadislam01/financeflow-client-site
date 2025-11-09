@@ -6,9 +6,9 @@ import SignUp from "../auth/SignUp/SignUp";
 import AddTransaction from "../pages/AddTransaction/AddTransaction";
 import MyTransaction from "../pages/MyTransaction/MyTransaction";
 import PageNotFound from "../pages/PageNotFound/PageNotFound";
-import Myprofile from "../pages/MyProfile/Myprofile";
 import Reports from "../pages/Reports/Reports";
 import PrivetRoutes from "./PrivetRoutes";
+import MyProfile from "../pages/MyProfile/Myprofile";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/profile',
-        Component: Myprofile
+        element: <PrivetRoutes><MyProfile></MyProfile></PrivetRoutes>
       }
     ],
   },

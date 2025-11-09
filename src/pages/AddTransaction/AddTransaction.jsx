@@ -23,7 +23,7 @@ const AddTransaction = () => {
     "Others",
   ];
 
-  const incomeList = ["Salary", "Pocket Money", "Business"];
+  const incomeList = ["Salary", "Pocket Money", "Business", "Tutoring"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +102,7 @@ const AddTransaction = () => {
                   setType(e.target.value);
                   setCategory("");
                 }}
-                className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
               >
                 <option value="Expense">Expense</option>
                 <option value="Income">Income</option>
@@ -116,7 +116,7 @@ const AddTransaction = () => {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
               >
                 <option value="">Select Category</option>
@@ -140,7 +140,7 @@ const AddTransaction = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Enter amount"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
               />
             </div>
@@ -153,7 +153,7 @@ const AddTransaction = () => {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+                className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
                 required
               />
             </div>
@@ -168,7 +168,7 @@ const AddTransaction = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Write a short note..."
               rows="3"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-teal-500 transition-all duration-150"
+              className="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-150"
             ></textarea>
           </div>
 
@@ -181,7 +181,7 @@ const AddTransaction = () => {
                 type="email"
                 value={user?.email || ""}
                 readOnly
-                className="w-full border border-gray-200 rounded-lg p-3 bg-gray-50 text-gray-500 cursor-not-allowed"
+                className="w-full border border-gray-200 rounded-lg p-3 outline-none bg-gray-50 text-gray-500 cursor-not-allowed"
               />
             </div>
             <div>
@@ -192,7 +192,7 @@ const AddTransaction = () => {
                 type="text"
                 value={user?.displayName || ""}
                 readOnly
-                className="w-full border border-gray-200 rounded-lg p-3 bg-gray-50 text-gray-500 cursor-not-allowed"
+                className="w-full border border-gray-200 rounded-lg p-3 outline-none bg-gray-50 text-gray-500 cursor-not-allowed"
               />
             </div>
           </div>
@@ -200,7 +200,7 @@ const AddTransaction = () => {
           <div className="text-center pt-4">
             <button
               type="submit"
-              className="px-12 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+              className="px-12 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer"
             >
               Add Transaction
             </button>
