@@ -3,7 +3,7 @@ import { MdAccountBalanceWallet } from 'react-icons/md'
 
 const Loading = () => {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#0F172A] text-white z-50">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-transparent text-white z-50">
       <div className="relative w-24 h-24">
         <div className="absolute inset-0 rounded-full border-4 border-t-[#10B981] border-b-[#14B8A6] border-l-transparent border-r-transparent animate-spin-slow"></div>
       </div>
@@ -11,7 +11,7 @@ const Loading = () => {
       <div className="flex items-center gap-2 mt-6">
         <MdAccountBalanceWallet className="text-[#10B981] w-7 h-7 animate-bounce" />
         <h1 className="text-3xl font-bold tracking-wide animate-pulse">
-          Finance<span className="text-[#14B8A6]">Flow</span>
+          <span className="text-[#14B8A6]">FinanceFlow</span>
         </h1>
       </div>
 

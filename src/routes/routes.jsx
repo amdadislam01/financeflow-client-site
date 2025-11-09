@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/my-transactions',
-        Component: MyTransaction
+        element: <PrivetRoutes><MyTransaction /></PrivetRoutes>
       },
       {
         path: '/reports',
