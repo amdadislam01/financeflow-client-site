@@ -77,7 +77,7 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-3 relative">
           <button
             onClick={toggleTheme}
-            className={`${textColor} p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition`}
+            className={`${textColor} p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-400 transition`}
           >
             {isDarkMode ? <FaSun /> : <FaMoon />}
           </button>
@@ -167,7 +167,7 @@ const Navbar = () => {
 
             <button
               onClick={toggleTheme}
-              className={`${textColor} p-2 rounded-md dark:hover:bg-gray-700 transition flex items-center justify-center cursor-pointer`}
+              className={`${textColor} p-2 rounded-md dark:hover:bg-gray-700 transition flex items-center justify-start ml-2.5 cursor-pointer`}
             >
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
@@ -200,7 +200,7 @@ const Navbar = () => {
                   alt="Profile"
                   className="w-12 h-12 rounded-full border-2 border-teal-500 mb-2"
                 />
-                <p className="text-sm font-semibold text-center">
+                <p className={`font-semibold text-xs text-center ${textColor}`}>
                   {user.displayName || user.reloadUserInfo.displayName}
                 </p>
                 <p className="text-xs text-gray-500 text-center mb-3">
