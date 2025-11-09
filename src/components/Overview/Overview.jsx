@@ -14,6 +14,8 @@ const Overview = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user?.email) return;
+
       try {
         const auth = getAuth();
         const token = await auth.currentUser.getIdToken(); 
@@ -33,9 +35,7 @@ const Overview = () => {
       }
     };
 
-    if (user?.email) {
-      fetchData();
-    }
+    fetchData();
   }, [user?.email]);
 
   useEffect(() => {
@@ -66,6 +66,13 @@ const Overview = () => {
     ? "bg-gradient-to-r from-red-700 to-red-800 text-gray-200"
     : "bg-gradient-to-r from-red-100 to-red-200 text-gray-800";
 
+  if (!user) {
+    return (
+      <div className={`${isDarkMode ? "bg-gray-900" : "bg-white"}  flex items-center justify-center`}>
+      </div>
+    );
+  }
+
   return (
     <div className={`${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
       <div className="max-w-[1500px] mx-auto py-16 px-6">
@@ -85,11 +92,7 @@ const Overview = () => {
               <FaWallet size={28} />
             </div>
             <div>
-              <p
-                className={`${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                } font-medium`}
-              >
+              <p className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} font-medium`}>
                 Total Balance
               </p>
               <h2 className="md:text-md lg:text-3xl font-bold">{balance.toFixed(2)}৳</h2>
@@ -103,11 +106,7 @@ const Overview = () => {
               <FaArrowUp size={28} />
             </div>
             <div>
-              <p
-                className={`${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                } font-medium`}
-              >
+              <p className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} font-medium`}>
                 Total Income
               </p>
               <h2 className="md:text-md lg:text-3xl font-bold">{income.toFixed(2)}৳</h2>
@@ -121,11 +120,7 @@ const Overview = () => {
               <FaArrowDown size={28} />
             </div>
             <div>
-              <p
-                className={`${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
-                } font-medium`}
-              >
+              <p className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} font-medium`}>
                 Total Expenses
               </p>
               <h2 className="md:text-md lg:text-3xl font-bold">{expense.toFixed(2)}৳</h2>
