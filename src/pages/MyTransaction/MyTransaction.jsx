@@ -23,7 +23,39 @@ const MyTransaction = () => {
     }
   }, [user]);
 
-  
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This transaction will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#059669",
+      cancelButtonColor: "#D33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/addtranstion/${_id}`, { method: "DELETE" })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Transaction removed successfully.",
+                icon: "success",
+              });
+              setTransactions(transactions.filter((t) => t._id !== _id));
+            }
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong. Try again.",
+              icon: "error",
+            });
+          });
+      }
+    });
+  };
 
   if (loading) return <Loading />;
 
@@ -38,7 +70,7 @@ const MyTransaction = () => {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="max-w-[1500px] mx-auto px-6 mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {transactions.length > 0 ? (
           transactions.map((item) => (
             <div
@@ -84,6 +116,7 @@ const MyTransaction = () => {
                   <FaEdit /> Update
                 </button>
                 <button
+                  onClick={() => handleDelete(item._id)}
                   className="flex items-center gap-2 text-red-500 hover:text-red-600 font-semibold text-sm transition cursor-pointer"
                 >
                   <FaTrashAlt /> Delete
