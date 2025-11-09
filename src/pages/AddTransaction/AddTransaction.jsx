@@ -34,6 +34,7 @@ const AddTransaction = () => {
       amount: parseFloat(amount),
       description,
       date,
+      created_at: new Date().toISOString(),
       user_email: user?.email || "",
       user_name: user?.displayName || "",
     };
