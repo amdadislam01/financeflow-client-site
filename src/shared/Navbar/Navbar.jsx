@@ -167,7 +167,7 @@ const Navbar = () => {
 
             <button
               onClick={toggleTheme}
-              className={`${textColor} p-2 rounded-md dark:hover:bg-gray-700 transition flex items-center justify-start ml-2.5 cursor-pointer`}
+              className={`${textColor} p-2 rounded-md dark:hover:bg-gray-400 transition flex items-center justify-start ml-2.5 cursor-pointer`}
             >
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
