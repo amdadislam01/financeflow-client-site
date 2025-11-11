@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useLoaderData } from "react-router";
+import axios from "axios";
 import { FaArrowLeft, FaMoneyBillWave, FaRegCalendarAlt, FaTag } from "react-icons/fa";
 import { useTheme } from "../../context/ThemeContext/ThemeContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const TransactionDetails = () => {
-  const transaction = useLoaderData();
+  const { user } = useContext(AuthContext); 
+   const transaction = useLoaderData();
   const { isDarkMode } = useTheme();
+  const [categoryTotal, setCategoryTotal] = useState(0);
+
+  useEffect(() => {
+    const sameCategoryTotal = async () => {
+      if (!user) return;
+
+      try {
+        const token = await user.getIdToken();
+        const res = await axios.get(
+          `https://financeflow-tau-eight.vercel.app/category-total?email=${user.email}&category=${transaction.category}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setCategoryTotal(res.data.totalAmount);
+      } catch (error) {
+        console.error("Error same category total:", error);
+      }
+    };
+
+    sameCategoryTotal();
+  }, [transaction.category, user]);
 
   return (
     <div
@@ -63,7 +90,7 @@ const TransactionDetails = () => {
                 transaction.type === "Income" ? "text-green-500" : "text-red-500"
               }`}
             >
-              <FaMoneyBillWave /> ৳{transaction.amount}
+              <FaMoneyBillWave /> ৳{categoryTotal}
             </p>
             <p
               className={`flex justify-center items-center gap-1 ${
