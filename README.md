@@ -37,14 +37,18 @@ FinanceFlow allows users to:
 | Technology | Version | Description |
 |-------------|----------|-------------|
 | React | ^19.1.1 | Component-based frontend library |
-| React Router | ^7.9.5 | Client-side routing |
-| Tailwind CSS | ^4.1.16 | Utility-first CSS framework |
-| Axios | ^1.13.2 | HTTP client for API calls |
-| Firebase | ^12.5.0 | Authentication & hosting |
-| React Toastify | ^11.0.5 | Toast notifications |
-| SweetAlert2 | ^11.26.3 | Elegant alerts |
-| SweetAlert2 React Content | ^5.1.0 | SweetAlert2 with React support |
-| React Icons | ^5.5.0 | Icon library for UI |
+| React DOM | ^19.1.1 | Enables rendering React components to the DOM |
+| React Router | ^7.9.5 | Client-side routing for React apps |
+| Tailwind CSS | ^4.1.16 | Utility-first CSS framework for styling |
+| @tailwindcss/vite | ^4.1.16 | Tailwind CSS plugin for Vite integration |
+| Axios | ^1.13.2 | HTTP client for making API requests |
+| Firebase | ^12.5.0 | Authentication, hosting, and backend services |
+| Chart.js | ^4.5.1 | JavaScript charting library for data visualization |
+| React Chart.js 2 | ^5.3.1 | React wrapper for Chart.js |
+| React Toastify | ^11.0.5 | Toast notification library for React |
+| SweetAlert2 | ^11.26.3 | Elegant and customizable alert popups |
+| SweetAlert2 React Content | ^5.1.0 | React integration for SweetAlert2 |
+| React Icons | ^5.5.0 | Icon library for React UI components |
 
 ### ⚙️ Backend
 
