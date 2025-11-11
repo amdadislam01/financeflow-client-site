@@ -12,6 +12,13 @@ const MyTransaction = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [formData, setFormData] = useState({
+    type: "",
+    category: "",
+    amount: "",
+    description: "",
+    date: "",
+  });
   const transactionsModal = useRef(null);
   const navigate = useNavigate();
 
@@ -78,24 +85,28 @@ const MyTransaction = () => {
 
   const handleOpenUpdateModal = (transaction) => {
     setSelectedTransaction(transaction);
+    setFormData({
+      type: transaction.type || "",
+      category: transaction.category || "",
+      amount: transaction.amount || "",
+      description: transaction.description || "",
+      date: transaction.date ? transaction.date.slice(0, 10) : "",
+    });
     transactionsModal.current.showModal();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const updatedData = {
-      type: form.type.value,
-      category: form.category.value,
-      amount: form.amount.value,
-      description: form.description.value,
-      date: form.date.value,
-    };
 
     fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${selectedTransaction._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedData),
+      body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -109,7 +120,7 @@ const MyTransaction = () => {
           });
           setTransactions((prev) =>
             prev.map((t) =>
-              t._id === selectedTransaction._id ? { ...t, ...updatedData } : t
+              t._id === selectedTransaction._id ? { ...t, ...formData } : t
             )
           );
           transactionsModal.current.close();
@@ -245,7 +256,7 @@ const MyTransaction = () => {
           </div>
         )}
       </div>
-
+        
       <dialog
         ref={transactionsModal}
         className="modal modal-bottom sm:modal-middle"
@@ -264,7 +275,8 @@ const MyTransaction = () => {
                 <label className="block text-sm font-medium mb-1">Type</label>
                 <select
                   name="type"
-                  defaultValue={selectedTransaction.type}
+                  value={formData.type}
+                  onChange={handleChange}
                   className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
                     isDarkMode
                       ? "bg-gray-900 border-gray-700 text-gray-100"
@@ -282,7 +294,8 @@ const MyTransaction = () => {
                 <input
                   type="text"
                   name="category"
-                  defaultValue={selectedTransaction.category}
+                  value={formData.category}
+                  onChange={handleChange}
                   required
                   className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
                     isDarkMode
@@ -296,7 +309,8 @@ const MyTransaction = () => {
                 <input
                   type="number"
                   name="amount"
-                  defaultValue={selectedTransaction.amount}
+                  value={formData.amount}
+                  onChange={handleChange}
                   required
                   className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
                     isDarkMode
@@ -311,7 +325,8 @@ const MyTransaction = () => {
                 </label>
                 <textarea
                   name="description"
-                  defaultValue={selectedTransaction.description}
+                  value={formData.description}
+                  onChange={handleChange}
                   rows="2"
                   className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
                     isDarkMode
@@ -325,7 +340,8 @@ const MyTransaction = () => {
                 <input
                   type="date"
                   name="date"
-                  defaultValue={selectedTransaction.date?.slice(0, 10)}
+                  value={formData.date}
+                  onChange={handleChange}
                   required
                   className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
                     isDarkMode
