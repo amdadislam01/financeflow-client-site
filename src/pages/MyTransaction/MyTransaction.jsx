@@ -19,6 +19,7 @@ const MyTransaction = () => {
     description: "",
     date: "",
   });
+  const [sortType, setSortType] = useState("date-desc");
   const transactionsModal = useRef(null);
   const navigate = useNavigate();
 
@@ -31,26 +32,18 @@ const MyTransaction = () => {
           const res = await fetch(
             `https://financeflow-tau-eight.vercel.app/addtranstion?email=${user.email}`,
             {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
+              headers: { authorization: `Bearer ${token}` },
             }
           );
           const data = await res.json();
           setTransactions(data);
-        } catch (error) {
-          console.error("Error fetching transactions:", error);
+        } catch {
         } finally {
           setLoading(false);
         }
-      } else {
-        setLoading(false);
-      }
+      } else setLoading(false);
     };
-
-    if (!authLoading) {
-      fetchTransactions();
-    }
+    if (!authLoading) fetchTransactions();
   }, [user, authLoading]);
 
   const handleDelete = (_id) => {
@@ -64,7 +57,9 @@ const MyTransaction = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${_id}`, { method: "DELETE" })
+        fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${_id}`, {
+          method: "DELETE",
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
@@ -75,9 +70,6 @@ const MyTransaction = () => {
               );
               setTransactions(transactions.filter((t) => t._id !== _id));
             }
-          })
-          .catch(() => {
-            Swal.fire("Error!", "Something went wrong. Try again.", "error");
           });
       }
     });
@@ -102,12 +94,14 @@ const MyTransaction = () => {
 
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
-
-    fetch(`https://financeflow-tau-eight.vercel.app/addtranstion/${selectedTransaction._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
+    fetch(
+      `https://financeflow-tau-eight.vercel.app/addtranstion/${selectedTransaction._id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
@@ -125,14 +119,19 @@ const MyTransaction = () => {
           );
           transactionsModal.current.close();
         }
-      })
-      .catch(() =>
-        Swal.fire({
-          icon: "error",
-          title: "Update failed",
-          text: "Try again later.",
-        })
-      );
+      });
+  };
+
+  const handleSortChange = (value) => {
+    setSortType(value);
+    let sorted = [...transactions];
+    if (value === "date-asc")
+      sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (value === "date-desc")
+      sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (value === "amount-asc") sorted.sort((a, b) => a.amount - b.amount);
+    if (value === "amount-desc") sorted.sort((a, b) => b.amount - a.amount);
+    setTransactions(sorted);
   };
 
   if (loading) return <Loading />;
@@ -146,7 +145,7 @@ const MyTransaction = () => {
       }`}
     >
       <div
-        className={`py-16 text-center shadow-xl transition-colors duration-500 ${
+        className={`py-16 text-center shadow-xl relative transition-colors duration-500 ${
           isDarkMode
             ? "bg-gradient-to-r from-green-800 via-teal-700 to-teal-600 text-white"
             : "bg-gradient-to-r from-green-600 via-teal-500 to-teal-400 text-white"
@@ -158,6 +157,43 @@ const MyTransaction = () => {
         <p className="mt-3 text-lg text-green-100/90 font-medium">
           Track your income & expenses effortlessly — FinanceFlow.
         </p>
+      </div>
+
+      <div className="flex items-center justify-center mt-10">
+        <select
+          defaultValue={sortType}
+          onChange={(e) => handleSortChange(e.target.value)}
+          className={`px-5 py-3 rounded-lg font-medium shadow-lg focus:outline-none transition-colors duration-300 ${
+            isDarkMode
+              ? "bg-gray-800 text-gray-100 border border-gray-700 hover:bg-gray-700"
+              : "bg-white text-gray-800 border border-gray-200 hover:bg-green-50"
+          }`}
+        >
+          <option
+            value="date-desc"
+            className={isDarkMode ? "bg-gray-800" : "bg-white"}
+          >
+            Sort by (New Date)
+          </option>
+          <option
+            value="date-asc"
+            className={isDarkMode ? "bg-gray-800" : "bg-white"}
+          >
+            Sort by (Old Date)
+          </option>
+          <option
+            value="amount-desc"
+            className={isDarkMode ? "bg-gray-800" : "bg-white"}
+          >
+            Sort by Amount (High → Low)
+          </option>
+          <option
+            value="amount-asc"
+            className={isDarkMode ? "bg-gray-800" : "bg-white"}
+          >
+            Sort by Amount (Low → High)
+          </option>
+        </select>
       </div>
 
       <div className="max-w-[1500px] mx-auto px-6 mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -256,7 +292,7 @@ const MyTransaction = () => {
           </div>
         )}
       </div>
-        
+
       <dialog
         ref={transactionsModal}
         className="modal modal-bottom sm:modal-middle"
