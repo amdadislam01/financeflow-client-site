@@ -106,7 +106,7 @@ const Footer = () => {
             <div className="text-sm text-gray-400">
               Developed By{" "}
               <a
-                href="https://amdadislam-01.netlify.app/"
+                href="https://amdadislam.netlify.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-teal-400 hover:underline font-medium"

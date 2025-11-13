@@ -166,5 +166,5 @@ FinanceFlow supports **Dark and Light themes** with one-click toggle, powered by
 **👤 Author:** [MD. Amdad Islam](https://github.com/amdadislam01)  
 📍 Dhaka, Bangladesh  
 📩 Email: amdad20063@gmail.com  
-🌐 Portfolio: [portfolio](https://amdadislam-01.netlify.app/)
+🌐 Portfolio: [portfolio](https://amdadislam.netlify.app/)
 
