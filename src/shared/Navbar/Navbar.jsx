@@ -25,14 +25,14 @@ const Navbar = () => {
 
   const navLinks = [
     { to: "/", label: "Home", icon: <FaHome /> },
-    { to: "/add-transaction", label: "Add Transaction", icon: <FaPlusCircle /> },
-    ...(user
-      ? [
-          { to: "/my-transactions", label: "My Transactions", icon: <FaChartPie /> },
-          { to: "/reports", label: "Reports", icon: <FaChartPie /> },
-          { to: "/profile", label: "My Profile", icon: <FaUserCircle /> },
-        ]
-      : []),
+    {
+      to: "/add-transaction",
+      label: "Add Transaction",
+      icon: <FaPlusCircle />,
+    },
+    { to: "/my-transactions", label: "My Transactions", icon: <FaChartPie /> },
+    { to: "/reports", label: "Reports", icon: <FaChartPie /> },
+    { to: "/profile", label: "My Profile", icon: <FaUserCircle /> },
   ];
 
   const gradient = isDarkMode
@@ -43,7 +43,11 @@ const Navbar = () => {
   const borderColor = isDarkMode ? "border-gray-600" : "border-teal-600";
 
   return (
-    <header className={`${isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} sticky top-0 z-50 border-b shadow-sm`}>
+    <header
+      className={`${
+        isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"
+      } sticky top-0 z-50 border-b shadow-sm`}
+    >
       <nav className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between h-16">
         <NavLink to="/" className="flex items-center gap-2 group">
           <div className={`${gradient} p-2 rounded-lg text-white`}>
@@ -83,7 +87,9 @@ const Navbar = () => {
           </button>
 
           {loading ? (
-            <div className={`w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin`} />
+            <div
+              className={`w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin`}
+            />
           ) : !user ? (
             <>
               <NavLink
@@ -115,7 +121,13 @@ const Navbar = () => {
               </div>
 
               {profileOpen && (
-                <div className={`${isDarkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"} absolute right-0 mt-3 w-56 shadow-lg rounded-xl p-4`}>
+                <div
+                  className={`${
+                    isDarkMode
+                      ? "bg-gray-800 text-gray-100"
+                      : "bg-white text-gray-800"
+                  } absolute right-0 mt-3 w-56 shadow-lg rounded-xl p-4`}
+                >
                   <p className="text-sm font-semibold text-center">
                     {user.displayName || user.reloadUserInfo.displayName}
                   </p>
@@ -144,7 +156,13 @@ const Navbar = () => {
       </nav>
 
       {isOpen && (
-        <div className={`${isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} lg:hidden border-t shadow-md`}>
+        <div
+          className={`${
+            isDarkMode
+              ? "bg-gray-900 border-gray-700"
+              : "bg-white border-gray-100"
+          } lg:hidden border-t shadow-md`}
+        >
           <div className="flex flex-col gap-2 px-4 py-3">
             {navLinks.map((link) => (
               <NavLink
