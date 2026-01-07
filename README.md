@@ -1,6 +1,5 @@
 #  FinanceFlow - Personal Finance Tracker
 
-
 **FinanceFlow** is a modern, full-stack **Personal Finance Management Web Application** built to help users track income, expenses, and budgets efficiently.  
 Developed using **React, Tailwind CSS, Firebase, Express.js, and MongoDB**, it provides real-time tracking, secure authentication, and a clean UI for an enhanced user experience.
 
